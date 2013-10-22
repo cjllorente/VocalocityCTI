@@ -1,0 +1,51 @@
+<apex:page controller="CTISearchController" sidebar="true" showHeader="true" cache="false" title="Search Results" >
+
+<head>
+             
+<!-- This will import the Interaction API JavaScript library. It should point to a valid Salesforce domain. -->
+<!--[if IE]>
+        <script type="text/javascript"> 
+            
+        window.console = {}; 
+        
+        console['log'] = function(){};
+        console['debug'] = function(){};
+        console['warn'] = function(){};
+        console['info'] = function(){};
+ 
+        </script>
+        
+         
+    <![endif]-->
+<apex:includeScript value="{!URLFOR($Resource.cti_scripts, 'js/jquery-1.8.2.min.js')}" />
+<apex:includeScript value="{!$Resource.JSON}" />
+<apex:includeScript value="{!$Resource.CookieHelper}" />
+    
+<script src="/support/api/25.0/interaction.js"></script>
+</head>
+
+<body>
+<h1 style="font-size:20px;font-weight:normal;">Search Results</h1>
+  <apex:form id="formHeader">
+  	<apex:pageBlock >   
+        <apex:repeat value="{!searchResults}" var="result">
+            <apex:pageBlock tabStyle="Contact" rendered="{!result.size > 0}">
+                <apex:facet name="header" >
+                    <h3 class="mainTitle" style="color:#000">
+                        <img src="{!result.imageURL}"/>{!result.labelPlural} ({!result.size})
+                    </h3>
+                </apex:facet>
+                <apex:pageBlockTable value="{!result.objects}" var="object">
+                    <apex:column headerValue="{!result.nameField}">
+                        <apex:outputLink value="/{!object.Id}">{!object[result.nameField]}</apex:outputLink>
+                    </apex:column> 
+                    <apex:repeat value="{!result.phoneFields}" var="field">
+                        <apex:column value="{!object[field]}"/>
+                    </apex:repeat>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:repeat>
+        </apex:pageBlock>
+   </apex:form>
+</body>     
+</apex:page>

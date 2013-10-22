@@ -1,0 +1,1 @@
+public class CTITypeException extends Exception{}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns3:deviceList xmlns:ns2="http://vocalocity.com/HDAP/customers" xmlns:ns3="http://vocalocity.com/HDAP/users">
+    <device>
+        <extension>302</extension>
+        <type>Extension</type>
+        <sipid>VH2684</sipid>
+        <password>Vocal123</password>
+        <registrar>sip-hdap.vocalocity.com</registrar>
+    </device>
+    <device>
+        <extension>1118</extension>
+        <type>Extension</type>
+        <sipid>VH9185</sipid>
+        <password>Sandy1</password>
+        <registrar>sip-hdap.vocalocity.com</registrar>
+    </device>
+    <device>
+        <extension>1141</extension>
+        <type>Extension</type>
+        <sipid>VH12578</sipid>
+        <password>Sandy1</password>
+        <registrar>sip-hdap.vocalocity.com</registrar>
+    </device>
+    <device>
+        <extension>1145</extension>
+        <type>Extension</type>
+        <sipid>VH12582</sipid>
+        <password>7k46pbct</password>
+        <registrar>sip-hdap.vocalocity.com</registrar>
+    </device>
+</ns3:deviceList>

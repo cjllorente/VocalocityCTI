@@ -1,0 +1,150 @@
+<apex:page controller="CTIController" sidebar="false" showHeader="false" standardStylesheets="false" cache="false">
+<head>  
+    <meta charset="utf-8"/>        
+    <meta name="description" content="Vocalocity Salesforce CTI Login"/>
+    <meta name="author" content="Vocalocity"/>
+    
+    <title>Vocalocity Salesforce CTI Login</title>
+    <apex:includeScript value="{!URLFOR($Resource.cti_scripts, 'js/jquery-1.8.2.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.cti_scripts, 'js/jquery-plugin-validation.js')}" />    
+    
+    <apex:includeScript value="{!URLFOR($Resource.cti_scripts, 'js/jquery-1.8.2.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.cti_scripts, 'js/jquery-ui-1.8.24.custom.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.cti_scripts, 'js/ui.dropdownchecklist.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.cti_scripts, 'js/jquery.formdefaults.js')}" />
+    <apex:includeScript value="{!$Resource.xdate}" />
+    <apex:includeScript value="{!$Resource.PhoneFormat}" />
+    <apex:includeScript value="{!$Resource.JSON}" />
+    <apex:includeScript value="{!$Resource.CookieHelper}" />
+    
+    <!-- CTI scripts were minified using jscompress.com -->
+    <!--  <apex:includeScript value="{!$Resource.CTI_mini}" /> --> 
+    <apex:includeScript value="{!$Resource.CTI}" />
+    <apex:includeScript value="{!$Resource.CTI_ui}" />
+    <apex:includeScript value="{!$Resource.CTI_call}" />
+    <apex:includeScript value="{!$Resource.CTI_user}" />
+    <apex:includeScript value="{!$Resource.CTI_monitor}" />
+    <!--[if IE]>
+    <script type="text/javascript">
+        window['isIE'] = true;</script>
+    <![endif]-->
+    <script type="text/javascript">
+    Visualforce.remoting.timeout = 120000; //120 seconds
+    jQuery(document).ready(function(){
+        var RELEASE = (window['isIE'] || false) && suppressAll();
+        if(!console.debug){
+            console.debug = console.log; 
+        }
+        CTIController = CTIController || vocalocitysfcti.CTIController;
+        CTI.init();
+    });
+    
+    function suppressAll(){
+        function nop(){};
+        window.console = {
+            'log' : nop,
+            'debug' : nop,
+            'warn' : nop,
+            'info' : nop,
+            'error' : nop
+        }; 
+
+        window.onerror = nop;
+        return true;
+    }
+    </script>
+
+    <!-- This will import the Interaction API JavaScript library. It should point to a valid Salesforce domain. -->
+    <script src="/support/api/27.0/interaction.js"></script>    
+    <!-- <apex:stylesheet value="{!$Resource.dev_styles}"/> -->
+   <apex:stylesheet value="{!URLFOR($Resource.cti_styles, 'css/styles.css')}"/>  
+    <!--[if IE]>
+    <link rel="stylesheet" href="{!URLFOR($Resource.cti_styles, 'css/ie.css')}" />
+    <![endif]-->
+</head>
+
+<body>
+
+<div id="failurePane" class="container" style="display:none;padding:3%;width:auto;">    
+    
+    <h1 class="log_error">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Server commnication lost!</h1>
+    <p>Please refresh the page to restore connection.</p>
+        
+</div>
+
+<div id="loginPage" class="container" style="display:none;padding:3%;width:auto;">    
+    <form id="loginForm">      
+    <h1 class="title">Sign in to Vocalocity</h1>
+
+    <h1 class="input">Username</h1>
+    <input id="username" type="text" class="required swidth uname" />
+    <h1 class="input">Password</h1>
+    <input id="password" type="password" class="required swidth pword"/>
+    </form>
+
+    <!--<input type="checkbox" id="remembered" checked="checked"/>
+    <label class="remember" for="remember">&nbsp;Remember?</label>-->
+    <input type="button" 
+            class="btnLogin" 
+            value="Login" 
+            onclick="CTI.ui.login()" /> 
+        
+</div>
+
+<div id="ctiPage" class="container" style="display:none;padding:3%;width:auto;">
+       
+    <h1 id="agentNameField" class="agentName"></h1>
+    <a href="#" onclick="CTI.ui.logout(); return false;" style="float:right">Logout</a>
+    <br class="float_clear"/>
+    <h1 class="input" style="width:60px;float:left;">Extensions</h1>
+    <div id="selectedExtensionsDiv" style="float:right"> </div>
+    <br class="float_clear"/>
+    
+    
+    <a href="#" 
+        class="head" 
+        id="makeACallLabelField" 
+        onclick="jQuery('#dialer').toggle('fast');">Make a Call</a>
+    <div class="content" id="dialer">
+        <p>Enter a number number to dial</p>
+        <input id="dialerField" type="text" name="dialerField" class="swidth"/>
+                
+        <table id="dialpad" class="dialpad">
+            <tr>
+                <td><a class="b1" href="#">1</a></td>
+                <td><a class="b2" href="#">2</a></td>
+                <td><a class="b3" href="#">3</a></td>
+            </tr>
+            <tr>
+                <td><a class="b4" href="#">4</a></td>
+                <td><a class="b5" href="#">5</a></td>
+                <td><a class="b6" href="#">6</a></td>
+            </tr>
+            <tr>
+                <td><a class="b7" href="#">7</a></td>
+                <td><a class="b8" href="#">8</a></td>
+                <td><a class="b9" href="#">9</a></td>
+            </tr>
+            <tr>
+                <td><a class="bstar" href="#">*</a></td>
+                <td><a class="b0" href="#">0</a></td>
+                <td><a class="bpound" href="#">#</a></td>
+            </tr>
+        </table>
+        
+        <a href="#" class="callButton" onclick="CTI.ui.clickToCall(jQuery('#dialerField').val());">Call</a>
+    </div>
+            
+    <ul id="callInfoList"></ul>
+                     
+</div>
+<br class="float_clear"/>
+<div class="branding">
+    <apex:image value="{!URLFOR($Resource.cti_styles, 'images/vocalocity-logo.png')}" 
+        width="90" 
+        height="30" 
+        alt="Powered by Vocalocity" />
+</div>
+    
+</body>
+</apex:page>
