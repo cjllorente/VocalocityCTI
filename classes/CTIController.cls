@@ -1,6 +1,24 @@
-global with sharing class CTIController{ 
+/**
+ * This code is PROPRIETARY AND CONFIDENTIAL to Vocalocity, Inc.
+ * -- DO NOT RE-DISTRIBUTE THIS SOURCE CODE WITHOUT EXPRESS PERMISSION. --
+ *
+ * This source code is Copyright (c) 2013 by Vocalocity, Inc.
+ * All Rights Reserved.
+ *
+ * The source code for this program is not published or
+ * otherwise divested of its trade secrets, irrespective
+ * of what has been deposited with the US Copyright Office.
+ *
+ */
+
+global with sharing class CTIController{
 	
-	global static final String NAMESPACE = 'vocalocitysfcti__';
+	//namespaces change based on environment
+	private static final String DEVELOPMENT = 'vocalocitysfcti__'; 
+	private static final String MANAGED = 'vocalocitysfcti__';
+	private static final String UNMANAGED = '';
+	
+	global static final String NAMESPACE = MANAGED;
 	
 	@RemoteAction
 	global static String getNamespace(){
